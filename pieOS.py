@@ -1,6 +1,8 @@
 import turtle as t
 import os
 import subprocess as sub
+from datetime import datetime
+
 
 apps=["cmd", "sh"]
 commands=["0 cmd", "0 sh"]
@@ -70,7 +72,8 @@ def mainloop():
 
     for i in range(len(apps)):
         draw_rect(-200+(i%8)*50, (200-(i//8)*50), 40, 40, colours[i%7], "Black", apps[i], 8)
-        
+
+    draw_rect(-200, 200, 0, 0, "Black", "White", datetime.now().strftime("%H:%M:%S"), 10)
     t.update()
     t.ontimer(mainloop, 10)
 
