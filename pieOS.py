@@ -1,13 +1,39 @@
 import turtle as t
 import os
-apps=["terminal", "settings", "other", "demo"]
-commands=["0 start cmd", "0 start cmd", "0 start cmd", "0 start cmd"]
-colours=["Red", "Orange", "Yellow", "Green", "Blue", "Indigo", "Violet"]
+import subprocess as sub
+
+apps=["cmd", "sh"]
+commands=["0 cmd", "0 sh"]
 currentstring=""
+
+
+files = os.listdir(os.path.dirname(os.path.abspath(__file__)))
+for i in files:
+    if ".py" in i:
+        currentstring=i[0:-3]
+
+        apps.append(currentstring)
+
+        currentstring="1 "+i
+        commands.append(currentstring)
+
+    if ".gif" in i:
+        currentstring=i[0:-4]
+
+        apps.append(currentstring)
+        
+        currentstring="2 "+i
+        commands.append(currentstring)
+
+
+colours=["Red", "Orange", "Yellow", "Green", "Blue", "Indigo", "Violet"]
+
 t.tracer(0, 0)
 t.pencolor("Green")
 t.penup()
 t.hideturtle()
+t.setup(450, 450)
+t.bgcolor("Black")
 def draw_rect(x, y, w, h, colour, colour2, text, font_size):
     t.penup()
     t.pencolor(colour)
@@ -31,17 +57,23 @@ def click(x, y):
             currentstring=commands[i]
             if currentstring[0] == "0":
                 currentstring=currentstring[2:]
-                os.system(currentstring)
+                sub.Popen(currentstring)
             elif currentstring[0] == "1":
                 currentstring=currentstring[2:]
-                exec(open(currentstring,"r").read())
+                sub.Popen("py "+currentstring)
+            elif currentstring[0] == "2":
+                currentstring=currentstring[2:]
+                t.bgpic(currentstring)
+
 def mainloop():
     t.clear()
+
     for i in range(len(apps)):
         draw_rect(-200+(i%8)*50, (200-(i//8)*50), 40, 40, colours[i%7], "Black", apps[i], 8)
         
     t.update()
     t.ontimer(mainloop, 10)
+
 t.onscreenclick(click)
 mainloop()
 t.mainloop()
